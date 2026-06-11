@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { prisma } from '@/lib/prisma';
 import { getSession } from '@/lib/auth';
 import { COSTO_INSCRIPCION } from '@/lib/utils';

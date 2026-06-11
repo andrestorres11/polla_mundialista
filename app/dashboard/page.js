@@ -1,17 +1,18 @@
+import { redirect } from 'next/navigation';
 import { getSession } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { COSTO_INSCRIPCION } from '@/lib/utils';
 import Link from 'next/link';
 
+export const dynamic = 'force-dynamic';
+
 async function getStats() {
-  const [totalUsers, totalPartidos, jugados, pendientes] = await Promise.all([
+  const [totalUsers, jugados, pendientes] = await Promise.all([
     prisma.user.count({ where: { isAdmin: false } }),
-    prisma.partido.count(),
     prisma.partido.count({ where: { jugado: true } }),
     prisma.partido.count({ where: { jugado: false } }),
   ]);
 
-  // Top 5 standings
   const standings = await prisma.user.findMany({
     where: { isAdmin: false },
     include: {
@@ -32,7 +33,6 @@ async function getStats() {
 
   return {
     totalUsers,
-    totalPartidos,
     jugados,
     pendientes,
     bolsa: totalUsers * COSTO_INSCRIPCION,
@@ -42,15 +42,13 @@ async function getStats() {
 
 export default async function DashboardPage() {
   const session = await getSession();
+  if (!session) redirect('/login');
+
   const stats = await getStats();
 
-  // Next 3 matches
   const proximos = await prisma.partido.findMany({
     where: { jugado: false },
-    include: {
-      equipoLocal: true,
-      equipoVisita: true,
-    },
+    include: { equipoLocal: true, equipoVisita: true },
     orderBy: { fechaHora: 'asc' },
     take: 3,
   });
@@ -84,7 +82,6 @@ export default async function DashboardPage() {
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
-        {/* Top 5 */}
         <div className="card">
           <div className="card-header flex justify-between items-center">
             <span>🥇 Top 5 Tabla de Posiciones</span>
@@ -124,7 +121,6 @@ export default async function DashboardPage() {
           </div>
         </div>
 
-        {/* Proximos partidos */}
         <div className="card">
           <div className="card-header flex justify-between items-center">
             <span>⚽ Proximos Partidos</span>
@@ -135,7 +131,10 @@ export default async function DashboardPage() {
           ) : proximos.map(p => (
             <div key={p.id} style={{ padding: '0.75rem 0', borderBottom: '1px solid var(--grey)' }}>
               <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '0.3rem' }}>
-                Grupo {p.grupo} · {new Date(p.fechaHora).toLocaleString('es-CO', { timeZone: 'America/Bogota', weekday: 'short', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                Grupo {p.grupo} · {new Date(p.fechaHora).toLocaleString('es-CO', {
+                  timeZone: 'America/Bogota', weekday: 'short',
+                  day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit'
+                })}
               </div>
               <div style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--navy)' }}>
                 {p.equipoLocal.bandera} {p.equipoLocal.nombre} vs {p.equipoVisita.nombre} {p.equipoVisita.bandera}
