@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id          Int          @id @default(autoincrement())
+  nombre      String
+  email       String       @unique
+  password    String
+  empresa     String?
+  isAdmin     Boolean      @default(false)
+  createdAt   DateTime     @default(now())
+  pronosticos Pronostico[]
+
+  @@map("users")
+}
+
+model Equipo {
+  id              Int          @id @default(autoincrement())
+  nombre          String
+  grupo           String       // A-L
+  bandera         String?
+  partidosLocal   Partido[]    @relation("EquipoLocal")
+  partidosVisita  Partido[]    @relation("EquipoVisita")
+  campeonDe       Pronostico[] @relation("CampeonPronostico")
+
+  @@map("equipos")
+}
+
+model Partido {
+  id            Int          @id @default(autoincrement())
+  fase          String       @default("Grupos") // Grupos, Octavos, Cuartos, Semifinal, Tercero, Final
+  grupo         String?
+  equipoLocal   Equipo       @relation("EquipoLocal",  fields: [localId],  references: [id])
+  localId       Int
+  equipoVisita  Equipo       @relation("EquipoVisita", fields: [visitaId], references: [id])
+  visitaId      Int
+  fechaHora     DateTime
+  estadio       String?
+  golesLocal    Int?
+  golesVisita   Int?
+  jugado        Boolean      @default(false)
+  pronosticos   Pronostico[]
+
+  @@map("partidos")
+}
+
+model Pronostico {
+  id            Int      @id @default(autoincrement())
+  user          User     @relation(fields: [userId],   references: [id], onDelete: Cascade)
+  userId        Int
+  partido       Partido  @relation(fields: [partidoId], references: [id], onDelete: Cascade)
+  partidoId     Int
+  golesLocal    Int
+  golesVisita   Int
+  campeon       Equipo?  @relation("CampeonPronostico", fields: [campeonId], references: [id])
+  campeonId     Int?
+  puntos        Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([userId, partidoId])
+  @@map("pronosticos")
+}
