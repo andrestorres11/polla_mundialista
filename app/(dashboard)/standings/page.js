@@ -21,7 +21,7 @@ async function getStandings() {
       const parciales = jugados.filter(p => p.puntos === 1).length;
       const fallidos = jugados.filter(p => p.puntos === 0).length;
       const sinPron = 0;
-      return { id: u.id, nombre: u.nombre, empresa: u.empresa, total, exactos, parciales, fallidos, pendientes: all.filter(p => !p.partido.jugado).length };
+      return { id: u.id, nombre: u.nombre, total, exactos, parciales, fallidos, pendientes: all.filter(p => !p.partido.jugado).length };
     })
     .sort((a, b) => b.total - a.total || b.exactos - a.exactos);
 }
@@ -63,7 +63,6 @@ export default async function StandingsPage() {
               <tr>
                 <th style={{ width: '40px' }}>#</th>
                 <th>Jugador</th>
-                <th>Empresa</th>
                 <th style={{ textAlign: 'center' }}>Puntos</th>
                 <th style={{ textAlign: 'center' }}>Exactos (3pts)</th>
                 <th style={{ textAlign: 'center' }}>Parciales (1pt)</th>
@@ -86,7 +85,6 @@ export default async function StandingsPage() {
                     </span>
                   </td>
                   <td className="font-bold">{u.nombre}</td>
-                  <td className="text-muted text-sm">{u.empresa || '-'}</td>
                   <td style={{ textAlign: 'center' }}>
                     <span className="badge badge-navy" style={{ fontSize: '0.9rem' }}>{u.total}</span>
                   </td>

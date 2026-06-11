@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 export default function RegistroPage() {
   const router = useRouter();
-  const [form, setForm] = useState({ nombre: '', email: '', empresa: '', password: '', confirm: '' });
+  const [form, setForm] = useState({ nombre: '', email: '', password: '', confirm: '' });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
@@ -41,7 +41,7 @@ export default function RegistroPage() {
           <span style={{ fontSize: '3rem' }}>⚽</span>
         </div>
         <h1 className="auth-title">Crear Cuenta</h1>
-        <p className="auth-subtitle">Inscripcion: $20.000 COP por participante</p>
+        <p className="auth-subtitle">Inscripcion: $15.000 COP por participante</p>
 
         {error && <div className="alert alert-error">{error}</div>}
         {success && <div className="alert alert-success">{success}</div>}
@@ -64,14 +64,6 @@ export default function RegistroPage() {
               placeholder="tu@correo.com"
               value={form.email}
               onChange={e => setForm(p => ({ ...p, email: e.target.value }))}
-            />
-          </div>
-          <div className="form-group">
-            <label>Empresa / Area</label>
-            <input
-              placeholder="Ej: OET, Desarrollo, RR.HH."
-              value={form.empresa}
-              onChange={e => setForm(p => ({ ...p, empresa: e.target.value }))}
             />
           </div>
           <div className="form-group">

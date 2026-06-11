@@ -1,11 +1,8 @@
 export const dynamic = 'force-dynamic';
 import { prisma } from '@/lib/prisma';
-import { getSession } from '@/lib/auth';
 import { COSTO_INSCRIPCION } from '@/lib/utils';
 
 export default async function ParticipantesPage() {
-  const session = await getSession();
-
   const users = await prisma.user.findMany({
     where: { isAdmin: false },
     include: {
@@ -31,7 +28,6 @@ export default async function ParticipantesPage() {
                 <th>#</th>
                 <th>Nombre</th>
                 <th>Correo</th>
-                <th>Empresa / Area</th>
                 <th style={{ textAlign: 'center' }}>Pronosticos</th>
                 <th>Registro</th>
                 <th style={{ textAlign: 'center' }}>Inscripcion</th>
@@ -43,7 +39,6 @@ export default async function ParticipantesPage() {
                   <td className="text-muted">{i + 1}</td>
                   <td className="font-bold">{u.nombre}</td>
                   <td className="text-sm text-muted">{u.email}</td>
-                  <td>{u.empresa || '-'}</td>
                   <td style={{ textAlign: 'center' }}>{u._count.pronosticos}</td>
                   <td style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
                     {new Date(u.createdAt).toLocaleDateString('es-CO', { timeZone: 'America/Bogota' })}

@@ -27,7 +27,7 @@ async function getStats() {
     .map(u => {
       const total = u.pronosticos.reduce((s, p) => s + p.puntos, 0);
       const exactos = u.pronosticos.filter(p => p.puntos === 3).length;
-      return { id: u.id, nombre: u.nombre, empresa: u.empresa, total, exactos };
+      return { id: u.id, nombre: u.nombre, total, exactos };
     })
     .sort((a, b) => b.total - a.total || b.exactos - a.exactos);
 
@@ -93,7 +93,6 @@ export default async function DashboardPage() {
                 <tr>
                   <th>#</th>
                   <th>Jugador</th>
-                  <th>Empresa</th>
                   <th style={{ textAlign: 'center' }}>Pts</th>
                   <th style={{ textAlign: 'center' }}>Exactos</th>
                 </tr>
@@ -109,7 +108,6 @@ export default async function DashboardPage() {
                       </span>
                     </td>
                     <td className="font-bold">{u.nombre}</td>
-                    <td className="text-muted text-sm">{u.empresa || '-'}</td>
                     <td style={{ textAlign: 'center' }}>
                       <span className="badge badge-navy">{u.total}</span>
                     </td>

@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs';
 
 export async function POST(req) {
   try {
-    const { nombre, email, empresa, password } = await req.json();
+    const { nombre, email, password } = await req.json();
 
     if (!nombre || !email || !password) {
       return NextResponse.json({ error: 'Campos requeridos' }, { status: 400 });
@@ -25,7 +25,6 @@ export async function POST(req) {
       data: {
         nombre,
         email: email.toLowerCase(),
-        empresa: empresa || null,
         password: hashed,
       },
     });

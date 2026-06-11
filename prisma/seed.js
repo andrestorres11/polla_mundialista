@@ -168,7 +168,6 @@ async function main() {
       nombre: 'Administrador',
       email: 'admin@polla.com',
       password: adminPass,
-      empresa: 'OET',
       isAdmin: true,
     },
   });

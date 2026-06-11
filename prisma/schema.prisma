@@ -13,7 +13,6 @@ model User {
   nombre      String
   email       String       @unique
   password    String
-  empresa     String?
   isAdmin     Boolean      @default(false)
   createdAt   DateTime     @default(now())
   pronosticos Pronostico[]
@@ -24,7 +23,7 @@ model User {
 model Equipo {
   id              Int          @id @default(autoincrement())
   nombre          String
-  grupo           String       // A-L
+  grupo           String
   bandera         String?
   partidosLocal   Partido[]    @relation("EquipoLocal")
   partidosVisita  Partido[]    @relation("EquipoVisita")
@@ -35,7 +34,7 @@ model Equipo {
 
 model Partido {
   id            Int          @id @default(autoincrement())
-  fase          String       @default("Grupos") // Grupos, Octavos, Cuartos, Semifinal, Tercero, Final
+  fase          String       @default("Grupos")
   grupo         String?
   equipoLocal   Equipo       @relation("EquipoLocal",  fields: [localId],  references: [id])
   localId       Int
@@ -53,7 +52,7 @@ model Partido {
 
 model Pronostico {
   id            Int      @id @default(autoincrement())
-  user          User     @relation(fields: [userId],   references: [id], onDelete: Cascade)
+  user          User     @relation(fields: [userId],    references: [id], onDelete: Cascade)
   userId        Int
   partido       Partido  @relation(fields: [partidoId], references: [id], onDelete: Cascade)
   partidoId     Int
