@@ -1,17 +1,14 @@
-import { redirect } from 'next/navigation';
-import { getSession } from '@/lib/auth';
-import Navbar from '@/components/Navbar';
+import './globals.css';
 
-export const dynamic = 'force-dynamic';
+export const metadata = {
+  title: 'Polla Mundialista 2026',
+  description: 'Pronosticos del Mundial FIFA 2026',
+};
 
-export default async function DashboardLayout({ children }) {
-  const session = await getSession();
-  if (!session) redirect('/login');
-
+export default function RootLayout({ children }) {
   return (
-    <>
-      <Navbar user={session} />
-      <div className="page-wrapper">{children}</div>
-    </>
+    <html lang="es">
+      <body>{children}</body>
+    </html>
   );
 }
