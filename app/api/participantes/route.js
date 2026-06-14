@@ -12,7 +12,6 @@ export async function GET() {
       id: true,
       nombre: true,
       email: true,
-      empresa: true,
       createdAt: true,
       _count: { select: { pronosticos: true } },
     },

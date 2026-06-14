@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { redirect } from 'next/navigation';
+import Link from 'next/link';
 
 function formatFecha(d) {
   return new Date(d).toLocaleString('es-CO', {
@@ -67,9 +68,14 @@ export default function AdminPage() {
 
   return (
     <>
-      <div className="page-header">
-        <h1 className="page-title">⚙️ Panel de Administracion</h1>
-        <p className="page-subtitle">Ingrese los resultados de los partidos para calcular puntos</p>
+      <div className="page-header flex justify-between items-center">
+        <div>
+          <h1 className="page-title">⚙️ Panel de Administracion</h1>
+          <p className="page-subtitle">Ingrese los resultados de los partidos para calcular puntos</p>
+        </div>
+        <Link href="/admin/pronosticos" className="btn btn-navy btn-sm">
+          ✏️ Editar pronosticos de jugadores
+        </Link>
       </div>
 
       <div className="alert alert-info">
